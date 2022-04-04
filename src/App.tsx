@@ -33,7 +33,7 @@ function App() {
   // };
 
   return (
-    <div>
+    <div className="vsto-container">
       {/* <h1>Hello World!</h1>
       <button onClick={login}>Moralis Metamask Login</button>
       <button onClick={logOut} disabled={isAuthenticating}>
