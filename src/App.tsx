@@ -2,6 +2,7 @@ import React from 'react';
 import './App.scss';
 import { useMoralis } from 'react-moralis';
 import PublicRoutes from './core/PublicRoutes';
+import { Provider, defaultTheme } from '@adobe/react-spectrum';
 
 function App() {
   // TODO: Metamask Integration
@@ -39,7 +40,9 @@ function App() {
       <button onClick={logOut} disabled={isAuthenticating}>
         Logout
       </button> */}
-      <PublicRoutes />
+      <Provider theme={defaultTheme}>
+        <PublicRoutes />
+      </Provider>
     </div>
   );
 }
