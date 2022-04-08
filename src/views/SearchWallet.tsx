@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './SearchWallet.scss';
-import logo from '../assets/logo.svg';
+import logo from '../assets/logo-white.svg';
 import {
   Button,
   Flex,
@@ -23,6 +23,7 @@ function SearchWallet() {
     await Web3Api.account
       .getNFTs(options)
       .then(function (nfts) {
+        // TODO: Store nfts in Redux Store
         setLoading(false);
         navigate(`/wallet/${value}`);
       })
@@ -43,16 +44,24 @@ function SearchWallet() {
       <header className="vsto-search-wallet-header">
         <img className="vsto-search-wallet-header-logo" src={logo} alt="Logo" />
       </header>
-      <section className="vsto-search-wallet-input-container">
+      <section className="vsto-search-wallet-body">
         <Flex gap="size-100" alignItems="center" wrap isHidden={loading}>
           <SearchField
             placeholder="Enter eth wallet address..."
             width={{ base: 'size-2400', S: 'size-5000' }}
-            onClear={() => setSearchValue('')}
-            onChange={setSearchValue}
-            onSubmit={() => onSearchSubmit()}
             value={searchValue}
+            onChange={setSearchValue}
+            onClear={() => {
+              setSearchValue('');
+              setSearchError(false);
+            }}
+            onSubmit={() => onSearchSubmit()}
           />
+          {searchError && searchValue !== '' && (
+            <span className="search-error">
+              Invalid Ethereum Wallet Address.
+            </span>
+          )}
           <Button
             variant="primary"
             isDisabled={searchValue === ''}
