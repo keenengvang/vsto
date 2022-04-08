@@ -1,13 +1,15 @@
 import { ProgressCircle, View } from '@adobe/react-spectrum';
 import React, { useEffect, useState } from 'react';
-import { useMoralisWeb3Api } from 'react-moralis';
+import { useMoralis, useMoralisWeb3Api } from 'react-moralis';
 import { useParams } from 'react-router-dom';
+import './ViewWallet.scss';
 
 function ViewWallet() {
-  const [loading, setLoading] = useState(false);
-  const [nfts, setNfts] = useState<any>({});
+  const [loading, setLoading] = useState(true);
+  const [nftWalletResult, setNftWalletResult] = useState<any>([]);
 
   let params = useParams();
+  const { isInitialized } = useMoralis();
   const Web3Api = useMoralisWeb3Api();
   const options: any = { address: '0x...' };
 
@@ -15,9 +17,10 @@ function ViewWallet() {
     options.address = value;
     await Web3Api.account
       .getNFTs(options)
-      .then(function (nfts) {
-        console.log(nfts);
-        setNfts(nfts);
+      .then(function (result) {
+        setNftWalletResult(result.result);
+        console.log(nftWalletResult);
+
         setLoading(false);
       })
       .catch(function (error) {
@@ -27,19 +30,28 @@ function ViewWallet() {
   };
 
   useEffect(() => {
-    setLoading(true);
-    getWalletNFTs(params.id);
-  }, []);
+    if (isInitialized) {
+      getWalletNFTs(params.id);
+    }
+  }, [isInitialized]);
 
   return (
-    <div>
-      <View isHidden={loading}>View Wallet</View>
+    <div className="vsto-view-wallet">
+      <View isHidden={loading}>My NFT Collection</View>
       <ProgressCircle
         isHidden={!loading}
         aria-label="Loading…"
         isIndeterminate
       />
-      <pre></pre>
+      <div className="vsto-view-wallet-collection">
+        {nftWalletResult.map((nft: any, index: number) => {
+          return (
+            <div key={index} className="vsto-view-wallet-collection-image">
+              {nft.name}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

@@ -5,15 +5,14 @@ import {
   Button,
   Flex,
   ProgressCircle,
-  SearchField,
-  Text,
-  View
+  SearchField
 } from '@adobe/react-spectrum';
 import { useMoralisWeb3Api } from 'react-moralis';
 import { useNavigate } from 'react-router-dom';
 
 function SearchWallet() {
   const [searchValue, setSearchValue] = useState('');
+  const [searchError, setSearchError] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const Web3Api = useMoralisWeb3Api();
@@ -29,6 +28,7 @@ function SearchWallet() {
       })
       .catch(function (error) {
         setLoading(false);
+        setSearchError(true);
         console.log(error);
       });
   };
@@ -47,7 +47,7 @@ function SearchWallet() {
         <Flex gap="size-100" alignItems="center" wrap isHidden={loading}>
           <SearchField
             placeholder="Enter eth wallet address..."
-            width={{ base: 'size-2400', S: 'size-6000' }}
+            width={{ base: 'size-2400', S: 'size-5000' }}
             onClear={() => setSearchValue('')}
             onChange={setSearchValue}
             onSubmit={() => onSearchSubmit()}
