@@ -1,4 +1,7 @@
+import { Grid } from '@adobe/react-spectrum';
+import { repeat } from '@adobe/react-spectrum';
 import { ProgressCircle, View } from '@adobe/react-spectrum';
+import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { useMoralis, useMoralisWeb3Api } from 'react-moralis';
 import { useParams } from 'react-router-dom';
@@ -42,6 +45,31 @@ function ViewWallet() {
     return nftImage;
   };
 
+  function Gallery() {
+    return (
+      <Grid
+        columns={repeat('auto-fit', 'size-3000')}
+        autoRows="size-3000"
+        justifyContent="center"
+        gap="size-300"
+      >
+        {accountWalletResults?.result &&
+          accountWalletResults.result.map((nft: accountNft, index: number) => {
+            const nftMetadata = nft.metadata ? JSON.parse(nft.metadata) : null;
+            return (
+              <motion.div
+                key={index}
+                className="vsto-view-wallet-collection-image"
+                whileHover={{ scale: 1.1 }}
+              >
+                <img src={parseNftImage(nftMetadata)} />
+              </motion.div>
+            );
+          })}
+      </Grid>
+    );
+  }
+
   useEffect(() => {
     // TODO: Check Redux Store and if none then call nfts from wallet
     if (isInitialized) {
@@ -51,22 +79,16 @@ function ViewWallet() {
 
   return (
     <div className="vsto-view-wallet">
-      <View isHidden={loading}>My NFT Collection</View>
+      <View isHidden={loading}>
+        My NFT Collection: <b>{params.id}</b>
+      </View>
       <ProgressCircle
         isHidden={!loading}
         aria-label="Loading…"
         isIndeterminate
       />
       <div className="vsto-view-wallet-collection">
-        {accountWalletResults?.result &&
-          accountWalletResults.result.map((nft: accountNft, index: number) => {
-            const nftMetadata = nft.metadata ? JSON.parse(nft.metadata) : null;
-            return (
-              <div key={index} className="vsto-view-wallet-collection-image">
-                <img src={parseNftImage(nftMetadata)} />
-              </div>
-            );
-          })}
+        <Gallery />
       </div>
     </div>
   );

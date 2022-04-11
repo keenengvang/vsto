@@ -1,20 +1,29 @@
+@import 'src/theme/theme.scss';
+
 .vsto-view-wallet {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  background: $rey;
+  color: $sith;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .vsto-view-wallet-collection {
-  display: flex;
-  flex-wrap: wrap;
+  max-width: 960px;
+  width: 100%;
   &-image {
-    width: 200px;
-    height: 200px;
-    background: grey;
-    border: 1px dotted black;
-    border-radius: 8px;
+    width: 280px;
+    height: 280px;
+    background: black;
+    margin: 16px;
     img {
-      width: 200px;
-      height: 200px;
+      box-shadow: -10px 10px 15px 5px rgba(0, 0, 0, 0.4);
+      width: 280px;
+      height: 280px;
+      object-fit: contain;
     }
   }
 }
